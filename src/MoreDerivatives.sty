@@ -22,6 +22,11 @@
 
 \ProcessKeyvalOptions*
 
+% Defines local parameters
+\newcommand{\MoreDerivatives@totalorder}{}
+\newcommand{\MoreDerivatives@numerator}{}
+\newcommand{\MoreDerivatives@denominator}{}
+
 \NewDocumentCommand{\differential}{ O{\MoreDerivatives@default} }{
     \IfStrEqCase{#1}{% Differential options
         {d}{\mathrm{d}} % Regular differential
@@ -52,25 +57,27 @@
 \NewDocumentCommand{\drv}{ s O{1} o >{\TrimSpaces} D..{\MoreDerivatives@default} m d.. m !o}{%
     % Determine total order
     \IfValueTF {#3} {%
-        \newcommand{\MoreDerivatives@totalorder}{#3}
+        \renewcommand{\MoreDerivatives@totalorder}{#3}
     }{%
-        \newcommand{\MoreDerivatives@totalorder}{Foo} % TODO: calculate order
+        \renewcommand{\MoreDerivatives@totalorder}{Foo} % TODO: calculate order
     }%
     %
     % Numerator
     \IfBooleanTF{#1}{%
-        \newcommand{\MoreDerivatives@numerator}{\differential[#4]}
+        \renewcommand{\MoreDerivatives@numerator}{\differential[#4]}
     }{%
-        \newcommand{\MoreDerivatives@numerator}{\differential[#4] #5}
+        \renewcommand{\MoreDerivatives@numerator}{\differential[#4] #5}
     }%
     %
     % Denominator
     \IfValueTF{#6}{%
-        \newcommand{\MoreDerivatives@denominator}{\differential[#6] #7}
+        \renewcommand{\MoreDerivatives@denominator}{\differential[#6] #7}
     }{%
-        \newcommand{\MoreDerivatives@denominator}{\differential[#4] #7}
+        \renewcommand{\MoreDerivatives@denominator}{\differential[#4] #7}
     }%
     %
     % Derivative
+    \IfValueT{#8}{\left(}
     \frac{\MoreDerivatives@numerator}{\MoreDerivatives@denominator}
+    \IfValueT{#8}{\right)_{#8}}
 }%
