@@ -13,6 +13,7 @@
 
 % Other Packages %
 \RequirePackage{graphicx}
+\RequirePackage{amsmath}
 
 % Setting up options
 \SetupKeyvalOptions{}
@@ -27,10 +28,10 @@
         {pd}{\partial}  % Partial derivatives
         {id}{d}         % Italic differential
         {rho}{          % Upside-down rho
-            \rotatebox{180}{\(\rho\)}
+            \text{\m@th\raisebox{\depth}{\rotatebox[origin=c]{180}{\(\rho\)}}}
         }%
         {vrho}{         % Upside-down varrho
-            \rotatebox{180}{\(\varrho\)}
+            \text{\m@th\raisebox{\depth}{\rotatebox[origin=c]{180}{\(\varrho\)}}}
         }%
     }[\PackageError{MoreDerivatives}{%
         Error: invalid differential option: #1
