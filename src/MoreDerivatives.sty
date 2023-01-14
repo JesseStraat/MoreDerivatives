@@ -28,16 +28,16 @@
 \newcommand{\MoreDerivatives@denominator}{}
 
 % Differential d
-\NewDocumentCommand{\differential}{ O{\MoreDerivatives@default} }{
+\NewDocumentCommand{\differential}{ O{\MoreDerivatives@default} }{%
     \IfStrEqCase{#1}{% Differential options
         {d}{\mathrm{d}} % Regular differential
         {pd}{\partial}  % Partial derivatives
         {id}{d}         % Italic differential
         {rho}{          % Upside-down rho
-            \text{\m@th\raisebox{\depth}{\rotatebox[origin=c]{180}{\(\rho\)}}}
+            \text{\m@th\raisebox{\depth}{\rotatebox[origin=c]{180}{\(\rho\)}}}%
         }%
         {vrho}{         % Upside-down varrho
-            \text{\m@th\raisebox{\depth}{\rotatebox[origin=c]{180}{\(\varrho\)}}}
+            \text{\m@th\raisebox{\depth}{\rotatebox[origin=c]{180}{\(\varrho\)}}}%
         }%
     }[\PackageError{MoreDerivatives}{%
         Error: invalid differential option: #1
@@ -58,16 +58,16 @@
 \NewDocumentCommand{\drv}{ s O{1} o >{\TrimSpaces} D..{\MoreDerivatives@default} m d.. m !o}{%
     % Determine total order
     \IfValueTF {#3} {%
-        \renewcommand{\MoreDerivatives@totalorder}{#3}
+        \renewcommand{\MoreDerivatives@totalorder}{#3}%
     }{%
         \renewcommand{\MoreDerivatives@totalorder}{} % TODO: calculate order
     }%
     %
     % Numerator
     \IfBooleanTF{#1}{%
-        \renewcommand{\MoreDerivatives@numerator}{\differential[#4]^{\MoreDerivatives@totalorder}}
+        \renewcommand{\MoreDerivatives@numerator}{\differential[#4]^{\MoreDerivatives@totalorder}}%
     }{%
-        \renewcommand{\MoreDerivatives@numerator}{\differential[#4]^{\MoreDerivatives@totalorder} #5}
+        \renewcommand{\MoreDerivatives@numerator}{\differential[#4]^{\MoreDerivatives@totalorder} #5}%
     }%
     %
     % Denominator
@@ -82,7 +82,7 @@
     \IfValueT{#8}{\left(}               % Add brackets around derivative if evaluated at point
     % The derivative itself:
     \frac{\MoreDerivatives@numerator}{\MoreDerivatives@denominator}
-
-    \IfValueT{#8}{\right)_{\mkern-4mu #8}}
+    %
+    \IfValueT{#8}{\right)_{\mkern-4mu #8}}%
     \IfBooleanT{#1}{\left(#5\right)}    % Append differentiand if starred
 }%
