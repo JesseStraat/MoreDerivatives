@@ -27,6 +27,7 @@
 \newcommand{\MoreDerivatives@numerator}{}
 \newcommand{\MoreDerivatives@denominator}{}
 
+% Differential d
 \NewDocumentCommand{\differential}{ O{\MoreDerivatives@default} }{
     \IfStrEqCase{#1}{% Differential options
         {d}{\mathrm{d}} % Regular differential
@@ -77,9 +78,11 @@
         \renewcommand{\MoreDerivatives@denominator}{\differential[#4] #7}
     }%
     %
-    % Derivative
-    \IfValueT{#8}{\left(}
+    % Output
+    \IfValueT{#8}{\left(}               % Add brackets around derivative if evaluated at point
+    % The derivative itself:
     \frac{\MoreDerivatives@numerator}{\MoreDerivatives@denominator}
+
     \IfValueT{#8}{\right)_{\mkern-4mu #8}}
-    \IfBooleanT{#1}{\left(#5\right)}
+    \IfBooleanT{#1}{\left(#5\right)}    % Append differentiand if starred
 }%
