@@ -1,0 +1,38 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{MoreDerivatives}[2023-01-14 Provides extra kinds of derivatives]
+
+% Technical packages %
+\RequirePackage{kvoptions}
+\RequirePackage{xparse}
+\RequirePackage{xstring}
+
+% Other Packages %
+\RequirePackage{graphicx}
+
+% Setting up options
+\SetupKeyvalOptions{}
+
+    \DeclareStringOption[d]{default}    % Can be any differential option
+
+\ProcessKeyvalOptions*
+
+\NewDocumentCommand{\differential}{ o }{
+    \IfNoValueTF{#1}
+    {\def\type{\MoreDerivatives@default}}
+    {\def\type{#1}}
+    \IfStrEqCase{\type}{% Differential options
+        {d}{\mathrm{d}} % Regular differential
+        {pd}{\partial}  % Partial derivatives
+        {id}{d}         % Italic differential
+        {rho}{          % Upside-down rho
+            \rotatebox{180}{\(\rho\)}
+        }%
+        {vrho}{         % Upside-down varrho
+            \rotatebox{180}{\(\varrho\)}
+        }%
+    }[\PackageError{MoreDerivatives}{%
+        Error: invalid differential option: \type
+    }{%
+        See the documentation for a list of options
+    }]    % Returns error if invalid option
+}

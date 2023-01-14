@@ -1,0 +1,5 @@
+*.pdf
+*.log
+*.synctex.gz
+*.synctex.gz(temp)
+*.aux
