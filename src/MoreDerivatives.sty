@@ -59,17 +59,18 @@
     \IfValueTF {#3} {%
         \renewcommand{\MoreDerivatives@totalorder}{#3}
     }{%
-        \renewcommand{\MoreDerivatives@totalorder}{Foo} % TODO: calculate order
+        \renewcommand{\MoreDerivatives@totalorder}{} % TODO: calculate order
     }%
     %
     % Numerator
     \IfBooleanTF{#1}{%
-        \renewcommand{\MoreDerivatives@numerator}{\differential[#4]}
+        \renewcommand{\MoreDerivatives@numerator}{\differential[#4]^{\MoreDerivatives@totalorder}}
     }{%
-        \renewcommand{\MoreDerivatives@numerator}{\differential[#4] #5}
+        \renewcommand{\MoreDerivatives@numerator}{\differential[#4]^{\MoreDerivatives@totalorder} #5}
     }%
     %
     % Denominator
+    % TODO: add higher-order derivatives
     \IfValueTF{#6}{%
         \renewcommand{\MoreDerivatives@denominator}{\differential[#6] #7}
     }{%
