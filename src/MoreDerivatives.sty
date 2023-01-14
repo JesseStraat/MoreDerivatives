@@ -21,11 +21,8 @@
 
 \ProcessKeyvalOptions*
 
-\NewDocumentCommand{\differential}{ o }{
-    \IfNoValueTF{#1}
-    {\def\type{\MoreDerivatives@default}}
-    {\def\type{#1}}
-    \IfStrEqCase{\type}{% Differential options
+\NewDocumentCommand{\differential}{ O{\MoreDerivatives@default} }{
+    \IfStrEqCase{#1}{% Differential options
         {d}{\mathrm{d}} % Regular differential
         {pd}{\partial}  % Partial derivatives
         {id}{d}         % Italic differential
@@ -36,8 +33,20 @@
             \rotatebox{180}{\(\varrho\)}
         }%
     }[\PackageError{MoreDerivatives}{%
-        Error: invalid differential option: \type
+        Error: invalid differential option: #1
     }{%
         See the documentation for a list of options
     }]    % Returns error if invalid option
 }
+
+% Derivative (inspiration taken from diffcoeff)
+% #1(.string.) = differential option
+% #1(*) = append differentiand boolean (as in diffcoeff)
+% #3(clist) = order of derivative per variable
+% #4(string) = derivative order override (ex. \drv[1][2] fx produces d^2f/dx)
+% #5(string) = differentiand
+% #6(clist) = variables to be differentiated to
+% #7(string) = point of evaluation
+\NewDocumentCommand{\drv}{ D..{\MoreDerivatives@default} s O{1} o >{\TrimSpaces} m m !o}{%
+    -- derivative here --
+}%
