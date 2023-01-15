@@ -34,12 +34,18 @@
     \IfStrEqCase{#1}{% Differential options
         {d}{\mathrm{d}} % Regular differential
         {pd}{\partial}  % Partial derivatives
+        {fc}{\delta}    % Functional derivative
+        {nab}{\nabla}   % Nabla
+        {del}{\Delta}   % Uppercase Delta
         {id}{d}         % Italic differential
         {rho}{          % Upside-down rho
             \text{\m@th\raisebox{\depth}{\rotatebox[origin=c]{180}{\(\rho\)}}}%
         }%
         {vrho}{         % Upside-down varrho
             \text{\m@th\raisebox{\depth}{\rotatebox[origin=c]{180}{\(\varrho\)}}}%
+        }%
+        {sig}{          % Rotated sigma
+            \text{\m@th\raisebox{0.4\depth}{\reflectbox{\rotatebox[origin=c]{90}{\(\sigma\)}}}}%
         }%
     }[\PackageError{MoreDerivatives}{%
         Error: invalid differential option: #1
