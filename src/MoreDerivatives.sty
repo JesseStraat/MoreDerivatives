@@ -26,6 +26,7 @@
 \newcommand{\MoreDerivatives@totalorder}{}
 \newcommand{\MoreDerivatives@numerator}{}
 \newcommand{\MoreDerivatives@denominator}{}
+\newcommand{\MoreDerivatives@d}{}
 
 % Differential d
 \NewDocumentCommand{\differential}{ O{\MoreDerivatives@default} }{%
@@ -59,10 +60,15 @@
     \renewcommand{\MoreDerivatives@totalorder}{#2}%
     %
     % Numerator
-    \IfBooleanTF{#1}{%
-        \renewcommand{\MoreDerivatives@numerator}{\differential[#3]^{\MoreDerivatives@totalorder}}%
+    \IfEq{\MoreDerivatives@totalorder}{1}{%
+        \renewcommand{\MoreDerivatives@d}{\differential[#3]}
     }{%
-        \renewcommand{\MoreDerivatives@numerator}{\differential[#3]^{\MoreDerivatives@totalorder} #4}%
+        \renewcommand{\MoreDerivatives@d}{\differential[#3]^\MoreDerivatives@totalorder}
+    }%
+    \IfBooleanTF{#1}{%
+        \renewcommand{\MoreDerivatives@numerator}{\MoreDerivatives@d}%
+    }{%
+        \renewcommand{\MoreDerivatives@numerator}{\MoreDerivatives@d #4}%
     }%
     %
     % Denominator
