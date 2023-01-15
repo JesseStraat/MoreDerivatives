@@ -1,3 +1,8 @@
+% Copyright (c) 2023 Jesse Straat
+% 
+% This software is released under the MIT License.
+% https://opensource.org/licenses/MIT
+
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{MoreDerivatives}[2023-01-14 Provides extra kinds of derivatives]
 
@@ -8,6 +13,8 @@
 
 % Other Packages %
 \RequirePackage{graphicx}
+\RequirePackage{amsmath}
+\RequirePackage{pgffor}
 
 % Setting up options
 \SetupKeyvalOptions{}
@@ -16,23 +23,77 @@
 
 \ProcessKeyvalOptions*
 
-\NewDocumentCommand{\differential}{ o }{
-    \IfNoValueTF{#1}
-    {\def\type{\MoreDerivatives@default}}
-    {\def\type{#1}}
-    \IfStrEqCase{\type}{% Differential options
+% Defines local parameters
+\newcommand{\MoreDerivatives@totalorder}{}
+\newcommand{\MoreDerivatives@numerator}{}
+\newcommand{\MoreDerivatives@denominator}{}
+\newcommand{\MoreDerivatives@d}{}
+
+% Differential d
+\NewDocumentCommand{\differential}{ O{\MoreDerivatives@default} }{%
+    \IfStrEqCase{#1}{% Differential options
         {d}{\mathrm{d}} % Regular differential
         {pd}{\partial}  % Partial derivatives
+        {fc}{\delta}    % Functional derivative
+        {nab}{\nabla}   % Nabla
+        {del}{\Delta}   % Uppercase Delta
         {id}{d}         % Italic differential
         {rho}{          % Upside-down rho
-            \rotatebox{180}{\(\rho\)}
+            \text{\m@th\raisebox{\depth}{\rotatebox[origin=c]{180}{\(\rho\)}}}%
         }%
         {vrho}{         % Upside-down varrho
-            \rotatebox{180}{\(\varrho\)}
+            \text{\m@th\raisebox{\depth}{\rotatebox[origin=c]{180}{\(\varrho\)}}}%
+        }%
+        {sig}{          % Rotated sigma
+            \text{\m@th\raisebox{0.4\depth}{\reflectbox{\rotatebox[origin=c]{90}{\(\sigma\)}}}}%
         }%
     }[\PackageError{MoreDerivatives}{%
-        Error: invalid differential option: \type
+        Error: invalid differential option: #1
     }{%
         See the documentation for a list of options
     }]    % Returns error if invalid option
 }
+
+% Derivative (inspiration taken from diffcoeff)
+% #1(*) = append differentiand boolean (as in diffcoeff)
+% #2(string) = total order of derivative
+% #3(.string.) = differential option
+% #4(string) = differentiand
+% #5(.string.) = differential option override for variables
+% #6({string} list OR string) = variables to be differentiated to
+% #7(string) = point of evaluation
+\NewDocumentCommand{\drv}{ s O{1} >{\TrimSpaces} D..{\MoreDerivatives@default} m d.. m !o}{%
+    % Determine total order
+    \renewcommand{\MoreDerivatives@totalorder}{#2}%
+    %
+    % Numerator
+    \IfEq{\MoreDerivatives@totalorder}{1}{%
+        \renewcommand{\MoreDerivatives@d}{\differential[#3]}
+    }{%
+        \renewcommand{\MoreDerivatives@d}{\differential[#3]^\MoreDerivatives@totalorder}
+    }%
+    \IfBooleanTF{#1}{%
+        \renewcommand{\MoreDerivatives@numerator}{\MoreDerivatives@d}%
+    }{%
+        \renewcommand{\MoreDerivatives@numerator}{\MoreDerivatives@d #4}%
+    }%
+    %
+    % Denominator
+    \renewcommand{\MoreDerivatives@denominator}{%
+        \foreach \x in #6{%
+            \IfValueTF{#5}{%
+                \differential[#5] \x
+            }{%
+                \differential[#3] \x
+            }%
+        }%
+    }%
+    %
+    % Output
+    \IfValueT{#7}{\left(}               % Add brackets around derivative if evaluated at point
+    % The derivative itself:
+    \frac{\MoreDerivatives@numerator}{\MoreDerivatives@denominator}
+    %
+    \IfValueT{#7}{\right)_{\mkern-4mu #7}}%
+    \IfBooleanT{#1}{\left(#4\right)}    % Append differentiand if starred
+}%

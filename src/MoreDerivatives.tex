@@ -1,8 +1,16 @@
+% Copyright (c) 2023 Jesse Straat
+% 
+% This software is released under the MIT License.
+% https://opensource.org/licenses/MIT
+
 \documentclass{article}
 \usepackage{MoreDerivatives}
+\usepackage{pgffor}
 
 \begin{document}
     \(\differential\)\\
     \(\differential[d]\differential[pd]\differential[id]\)\\
-    \(\differential[rho]\differential[vrho]\)
+    \(\differential[rho]\differential[vrho]\)\\
+    \(\drv .rho.fx \drv .vrho.f.rho.x[p]\)\\
+    \(\drv [8].vrho.f{{x,y,z^3,\alpha}}\)
 \end{document}
